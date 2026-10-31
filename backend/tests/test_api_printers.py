@@ -73,7 +73,9 @@ async def test_connection_test(client: httpx.AsyncClient, emulator: PrinterEmula
 def restrict_printers(app: FastAPI, monkeypatch: pytest.MonkeyPatch, port: int) -> None:
     """Production rules (no loopback) with only `port` allowed."""
     strict = make_settings(printer_allowed_ports=str(port), printer_allow_loopback=False)
-    monkeypatch.setattr(app.state, "settings", strict)
+    # Starlette's State keeps its attributes in `_state`, not in `__dict__`: since pytest 9.2,
+    # `monkeypatch.setattr` would delete the settings on undo instead of restoring them.
+    monkeypatch.setitem(app.state._state, "settings", strict)
 
 
 @pytest.mark.parametrize(
