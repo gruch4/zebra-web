@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/gruch4/zebra-web/compare/v1.1.0...v1.1.1) (2026-10-31)
+
+
+### Bug Fixes
+
+* **docker:** remove unused pip from the runtime image ([#11](https://github.com/gruch4/zebra-web/issues/11)) ([9e97fdd](https://github.com/gruch4/zebra-web/commit/9e97fddb982a33e171c0e890997cf49566350221))
+
 ## [1.1.0](https://github.com/gruch4/zebra-web/compare/v1.0.0...v1.1.0) (2026-10-31)
 
 
