@@ -1,0 +1,17 @@
+.git
+.github
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+frontend/dist
+frontend/coverage
+backend/tests
+docs
+.env
+*.md
+Makefile
+docker-compose*.yml
+release-please-config.json
+.release-please-manifest.json

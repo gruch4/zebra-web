@@ -1,0 +1,64 @@
+name: Bug report
+description: Something does not work, or the preview does not match the printout
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check the [existing issues](https://github.com/gruch4/zebra-web/issues) first.
+        Security problems go through [private reporting](https://github.com/gruch4/zebra-web/security/advisories/new), not here.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the designer
+        2. Add a Code 128 bar code with …
+        3. …
+  - type: textarea
+    id: zpl
+    attributes:
+      label: ZPL
+      description: The ZPL that shows the problem, if it is about printing or the preview. Remove anything private.
+      render: text
+  - type: textarea
+    id: images
+    attributes:
+      label: Screenshots, preview and printout
+      description: For preview problems, a photo or scan of the printed label next to a screenshot of the preview helps most.
+  - type: input
+    id: version
+    attributes:
+      label: zebra-web version
+      description: The image tag (e.g. `1.2.3`, `latest`, `edge`) or the commit you built.
+    validations:
+      required: true
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: How do you run it?
+      options:
+        - docker compose with the published image
+        - docker compose, built from source
+        - other container platform (Kubernetes, Portainer, …)
+        - from source (make dev-backend / dev-frontend)
+    validations:
+      required: true
+  - type: input
+    id: printer
+    attributes:
+      label: Printer model and firmware
+      description: Shown on the printer's page in zebra-web (Device → model, firmware), e.g. `ZD420-200dpi, V84.20.23Z`.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant output of `docker compose logs app`.
+      render: text

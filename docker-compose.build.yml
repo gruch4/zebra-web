@@ -1,0 +1,11 @@
+# Builds the image from this checkout instead of pulling it:
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+# (`make up` / `make up-dev` do this.)
+services:
+  app:
+    build: .
+    image: zebra-web:dev
+
+  printer-emulator:
+    build: .
+    image: zebra-web:dev

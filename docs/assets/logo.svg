@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="zebra-web logo">
+  <rect x="12" y="24" width="104" height="80" rx="12" fill="#1c7ed6"/>
+  <g fill="#fff">
+    <rect x="28" y="40" width="8" height="48"/>
+    <rect x="44" y="40" width="4" height="48"/>
+    <rect x="56" y="40" width="12" height="48"/>
+    <rect x="76" y="40" width="4" height="48"/>
+    <rect x="88" y="40" width="8" height="48"/>
+  </g>
+</svg>

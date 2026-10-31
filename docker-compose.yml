@@ -1,0 +1,48 @@
+# Runs the published image from GitHub Container Registry. To build the image from this checkout
+# instead, use `make up` (adds docker-compose.build.yml).
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-zebra}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zebra}
+      POSTGRES_DB: ${POSTGRES_DB:-zebra}
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: ghcr.io/gruch4/zebra-web:${ZEBRA_WEB_TAG:-latest}
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-zebra}:${POSTGRES_PASSWORD:-zebra}@db:5432/${POSTGRES_DB:-zebra}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # A fake Zebra printer for development: add a printer with host "printer-emulator", port 9100.
+  printer-emulator:
+    profiles: [dev]
+    image: ghcr.io/gruch4/zebra-web:${ZEBRA_WEB_TAG:-latest}
+    entrypoint: ["python", "-m", "app.printer.emulator", "--port", "9100"]
+    # Replaces the image's HTTP healthcheck (port 8000 is not served here): ask for ~HS over TCP.
+    healthcheck:
+      test: ["CMD", "python", "-m", "app.printer.emulator", "--check", "--port", "9100"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      start_interval: 2s
+      retries: 3
+
+volumes:
+  db-data:
