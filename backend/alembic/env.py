@@ -6,9 +6,8 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from app import models  # noqa: F401  (register tables on the metadata)
+from app import models
 from app.config import get_settings
-from app.db import Base
 
 config = context.config
 if config.config_file_name is not None and config.attributes.get("configure_logger", True):
@@ -18,7 +17,8 @@ if not config.get_main_option("sqlalchemy.url"):
     # ConfigParser treats "%" as interpolation, e.g. in URL-encoded passwords.
     config.set_main_option("sqlalchemy.url", get_settings().database_url.replace("%", "%%"))
 
-target_metadata = Base.metadata
+# Importing the models registers their tables on the shared metadata.
+target_metadata = models.Base.metadata
 
 
 def run_migrations_offline() -> None:

@@ -37,7 +37,8 @@ async def test_printer_crud_and_default_handling(client: httpx.AsyncClient):
     assert updated.json()["port"] == 9101
     assert (await client.get(f"/api/printers/{second['id']}")).json()["is_default"] is False
 
-    assert (await client.delete(f"/api/printers/{first['id']}")).status_code == 204
+    deleted = await client.delete(f"/api/printers/{first['id']}")
+    assert deleted.status_code == 204
     assert (await client.get(f"/api/printers/{second['id']}")).json()["is_default"] is True
     assert (await client.get(f"/api/printers/{first['id']}")).status_code == 404
 

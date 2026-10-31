@@ -87,15 +87,18 @@ async def test_listing_is_newest_first(client: httpx.AsyncClient):
 
 async def test_revoke(client: httpx.AsyncClient, api_token: dict):
     url = f"/api/tokens/{api_token['id']}"
-    assert (await client.delete(url)).status_code == 204
+    deleted = await client.delete(url)
+    assert deleted.status_code == 204
     revoked = (await client.get("/api/tokens")).json()[0]
     assert revoked["status"] == "revoked"
     assert revoked["revoked_at"] is not None
     first = revoked["revoked_at"]
     # Revoking again is harmless and keeps the original time.
-    assert (await client.delete(url)).status_code == 204
+    deleted = await client.delete(url)
+    assert deleted.status_code == 204
     assert (await client.get("/api/tokens")).json()[0]["revoked_at"] == first
-    assert (await client.delete("/api/tokens/9999")).status_code == 404
+    deleted = await client.delete("/api/tokens/9999")
+    assert deleted.status_code == 404
 
 
 async def test_users_only_manage_their_own_tokens(client: httpx.AsyncClient, app: FastAPI, as_user):
@@ -105,8 +108,10 @@ async def test_users_only_manage_their_own_tokens(client: httpx.AsyncClient, app
     as_user("alice")
     names = [t["name"] for t in (await client.get("/api/tokens")).json()]
     assert names == ["alice token"]
-    assert (await client.delete(f"/api/tokens/{theirs}")).status_code == 404
-    assert (await client.delete(f"/api/tokens/{mine}")).status_code == 204
+    deleted = await client.delete(f"/api/tokens/{theirs}")
+    assert deleted.status_code == 404
+    deleted = await client.delete(f"/api/tokens/{mine}")
+    assert deleted.status_code == 204
 
 
 async def test_tokens_of_the_local_user_are_shared(
@@ -118,7 +123,8 @@ async def test_tokens_of_the_local_user_are_shared(
     as_user("alice")
     listed = (await client.get("/api/tokens")).json()
     assert [(t["name"], t["shared"]) for t in listed] == [("legacy", True)]
-    assert (await client.delete(f"/api/tokens/{legacy}")).status_code == 204
+    deleted = await client.delete(f"/api/tokens/{legacy}")
+    assert deleted.status_code == 204
 
     as_user("bob")
     assert [t["status"] for t in (await client.get("/api/tokens")).json()] == ["revoked"]
@@ -137,5 +143,6 @@ async def test_with_login_disabled_every_token_is_manageable(
     theirs = await add_token(app, "alice", "alice token")
     listed = (await client.get("/api/tokens")).json()
     assert [(t["name"], t["shared"]) for t in listed] == [("alice token", False)]
-    assert (await client.delete(f"/api/tokens/{theirs}")).status_code == 204
+    deleted = await client.delete(f"/api/tokens/{theirs}")
+    assert deleted.status_code == 204
     assert (await client.get("/api/tokens")).json()[0]["status"] == "revoked"

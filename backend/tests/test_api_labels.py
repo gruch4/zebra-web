@@ -95,7 +95,8 @@ async def test_duplicate_delete_export(client: httpx.AsyncClient):
     assert export.text == label["zpl"]
     assert 'filename="Product.zpl"' in export.headers["content-disposition"]
 
-    assert (await client.delete(f"/api/labels/{label['id']}")).status_code == 204
+    deleted = await client.delete(f"/api/labels/{label['id']}")
+    assert deleted.status_code == 204
     assert (await client.get(f"/api/labels/{label['id']}")).status_code == 404
 
 
