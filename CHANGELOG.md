@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/gruch4/zebra-web/compare/v1.1.1...v1.1.2) (2026-10-31)
+
+
+### Bug Fixes
+
+* **printer:** drop a connection that cannot be closed instead of leaving it open ([#15](https://github.com/gruch4/zebra-web/issues/15)) ([6d21190](https://github.com/gruch4/zebra-web/commit/6d2119038c233238a480e204542095504b49ca4c))
+
 ## [1.1.1](https://github.com/gruch4/zebra-web/compare/v1.1.0...v1.1.1) (2026-10-31)
 
 
