@@ -17,7 +17,8 @@ async def test_draft_round_trip_and_delete(client: httpx.AsyncClient):
     assert again["data"] == {"zpl": "x"}
     assert (await client.get("/api/drafts/print-zpl")).json()["data"] == {"zpl": "x"}
 
-    assert (await client.delete("/api/drafts/print-zpl")).status_code == 204
+    deleted = await client.delete("/api/drafts/print-zpl")
+    assert deleted.status_code == 204
     assert (await client.get("/api/drafts/print-zpl")).json()["data"] == {}
 
 

@@ -182,8 +182,6 @@ async def test_client_no_response(emulator: PrinterEmulator):
 
 
 async def test_query_budget_starts_after_waiting_for_the_lock(emulator: PrinterEmulator):
-    import asyncio
-
     client = PrinterClient("127.0.0.1", emulator.port, timeout=0.5)
     async with client._lock:
         waiting = asyncio.create_task(client.host_status())
