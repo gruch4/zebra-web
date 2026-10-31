@@ -97,7 +97,7 @@ function PrinterMismatch({ design, printer }: { design: Design; printer: Printer
         `${dotsToMm(printWidth, printer.dpi)} mm; the rest is cut off.`,
     )
   }
-  if (lacksUtf8(printer.firmware) && designTexts(design).some((text) => /[^ -~\s]/.test(text))) {
+  if (lacksUtf8(printer.firmware) && designTexts(design).some((text) => /[^!-~\s]/.test(text))) {
     warnings.push(
       `${printer.name} runs firmware ${printer.firmware}, which predates UTF-8 (^CI28, ` +
         'firmware x.14): non-ASCII characters will not print as shown.',

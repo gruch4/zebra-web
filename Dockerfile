@@ -1,8 +1,12 @@
 # syntax=docker/dockerfile:1
 
+# Images are pinned by digest for reproducible builds; Dependabot keeps the digests current
+# (it reads FROM lines, which is why uv gets a stage of its own).
+FROM ghcr.io/astral-sh/uv:0.13.6@sha256:af22a52f5eafef3d78e551599d405c02df61919d18028f0cea8eda93bc9986d0 AS uv
+
 # ---- frontend build --------------------------------------------------------------------------
 # The built JS is the same for every platform, so build it natively instead of under emulation.
-FROM --platform=$BUILDPLATFORM node:24-alpine AS frontend
+FROM --platform=$BUILDPLATFORM node:24-alpine@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85 AS frontend
 WORKDIR /frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
@@ -10,8 +14,8 @@ COPY frontend/ ./
 RUN npm run build
 
 # ---- python dependencies ---------------------------------------------------------------------
-FROM python:3.14-slim AS backend
-COPY --from=ghcr.io/astral-sh/uv:0.12.22 /uv /usr/local/bin/uv
+FROM python:3.14-slim@sha256:cd89c30eda26ee911a4611b18680086e0ea42e6f5f8cbe653d07fa7958c9cec8 AS backend
+COPY --from=uv /uv /usr/local/bin/uv
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PROJECT_ENVIRONMENT=/app/.venv \
@@ -21,7 +25,7 @@ COPY backend/pyproject.toml backend/uv.lock backend/.python-version ./
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-dev --no-install-project
 
 # ---- runtime image ---------------------------------------------------------------------------
-FROM python:3.14-slim
+FROM python:3.14-slim@sha256:cd89c30eda26ee911a4611b18680086e0ea42e6f5f8cbe653d07fa7958c9cec8
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
