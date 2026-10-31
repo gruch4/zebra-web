@@ -81,12 +81,13 @@ class PrinterClient:
         writer.close()
         try:
             await asyncio.wait_for(writer.wait_closed(), timeout=self.timeout)
-        except OSError:
-            pass
+        # TimeoutError is an OSError, so it has to be handled first.
         except TimeoutError:
             # A printer that stopped reading never lets buffered data flush, so closing would
             # wait (holding this printer's lock) forever: drop the connection instead.
             writer.transport.abort()
+        except OSError:
+            pass  # the connection already broke: nothing is left to close
 
     async def send(self, data: str | bytes) -> None:
         payload = data.encode("utf-8") if isinstance(data, str) else data

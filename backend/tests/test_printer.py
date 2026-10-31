@@ -1,5 +1,6 @@
 import asyncio
 import time
+from unittest.mock import Mock
 
 import pytest
 
@@ -172,6 +173,19 @@ async def test_a_failure_while_sending_may_still_print():
         assert time.monotonic() - started < 3
     finally:
         server.close()
+
+
+async def test_a_connection_that_cannot_close_is_dropped():
+    """If closing times out (the printer stopped reading), the connection is aborted."""
+
+    async def never_closes() -> None:
+        await asyncio.sleep(30)
+
+    writer = Mock()
+    writer.wait_closed = never_closes
+    await PrinterClient("127.0.0.1", 9100, timeout=0.1)._close(writer)
+    writer.close.assert_called_once()
+    writer.transport.abort.assert_called_once()
 
 
 async def test_client_no_response(emulator: PrinterEmulator):
