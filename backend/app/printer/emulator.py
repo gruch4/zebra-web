@@ -128,7 +128,7 @@ class PrinterEmulator:
                     writer.write(reply)
                     await writer.drain()
         except ConnectionError:
-            pass
+            pass  # the client hung up: this connection is done
         finally:
             writer.close()
 
