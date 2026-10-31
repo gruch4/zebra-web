@@ -1,0 +1,6 @@
+name: zebra-web CodeQL config
+
+paths-ignore:
+  # Generated Alembic migrations: Alembic reads their module-level `revision` / `down_revision`
+  # variables itself, which CodeQL reports as unused globals in every migration.
+  - backend/alembic/versions
