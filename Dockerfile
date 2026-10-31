@@ -26,7 +26,10 @@ ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     STATIC_DIR=/app/static
-RUN groupadd --system app && useradd --system --gid app --home /app app
+# The app runs from /app/.venv and never needs pip; the base image's pip bundles its own copies
+# of urllib3, msgpack and setuptools, which then show up in image scans. Remove it.
+RUN python -m pip uninstall --yes --root-user-action=ignore pip \
+    && groupadd --system app && useradd --system --gid app --home /app app
 WORKDIR /app
 COPY --from=backend /app/.venv /app/.venv
 COPY backend/alembic.ini ./

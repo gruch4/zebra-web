@@ -35,9 +35,19 @@ Object.defineProperty(document, 'fonts', {
   value: { addEventListener: () => {}, removeEventListener: () => {}, ready: Promise.resolve() },
 })
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
-afterEach(() => {
+// Leaving a page saves its pending draft (useAutosaveDraft), so `cleanup()` can start requests.
+// Let them finish before the handlers are reset, or the next test's handlers answer them.
+const inFlight = new Set<string>()
+server.events.on('request:start', ({ requestId }) => inFlight.add(requestId))
+server.events.on('request:end', ({ requestId }) => inFlight.delete(requestId))
+
+beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
+afterEach(async () => {
   cleanup()
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  await vi.waitFor(() => {
+    if (inFlight.size > 0) throw new Error(`${inFlight.size} request(s) still in flight`)
+  })
   server.resetHandlers()
   localStorage.clear()
 })
