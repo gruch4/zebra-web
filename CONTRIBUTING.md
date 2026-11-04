@@ -12,7 +12,7 @@ welcome. zebra-web is maintained in spare time, so reviews and answers are best 
 
 ## Development setup
 
-Requirements: Python 3.14 + [uv](https://docs.astral.sh/uv/), Node.js 24, Docker (for
+Requirements: Python 3.14 + [uv](https://docs.astral.sh/uv/), Node.js 26, Docker (for
 PostgreSQL), GNU Make.
 
 ```bash
