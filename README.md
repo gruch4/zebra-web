@@ -324,7 +324,7 @@ Printed the test labels on another model or firmware? Results are very welcome, 
 
 ## Development
 
-Requirements: Python 3.14 + [uv](https://docs.astral.sh/uv/), Node.js 24, PostgreSQL (e.g. in
+Requirements: Python 3.14 + [uv](https://docs.astral.sh/uv/), Node.js 26, PostgreSQL (e.g. in
 Docker).
 
 ```bash
