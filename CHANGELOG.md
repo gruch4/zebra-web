@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.3](https://github.com/gruch4/zebra-web/compare/v1.1.2...v1.1.3) (2026-11-16)
+
+
+### Bug Fixes
+
+* **deps:** bump astral-sh/uv from 0.13.6 to 0.13.8 ([#30](https://github.com/gruch4/zebra-web/issues/30)) ([e8051c3](https://github.com/gruch4/zebra-web/commit/e8051c3a03933c7ac9ce6cbcc85336cdedfd2dee))
+* **deps:** bump node from `c6ad9e9` to `8996bb5` ([#21](https://github.com/gruch4/zebra-web/issues/21)) ([790eb28](https://github.com/gruch4/zebra-web/commit/790eb28e6a05cb14309b79e63217a30105f9100d))
+* **deps:** bump opentelemetry-api from 1.45.1 to 1.45.2 in /backend ([#28](https://github.com/gruch4/zebra-web/issues/28)) ([dfc18cd](https://github.com/gruch4/zebra-web/commit/dfc18cdc205fa51bb059ede4a4339267a41ead5d))
+* **deps:** bump python from `cd89c30` to `9aaa474` ([#29](https://github.com/gruch4/zebra-web/issues/29)) ([db9c066](https://github.com/gruch4/zebra-web/commit/db9c0660828f338fd1f30c811f474763a4f906f2))
+* **deps:** bump the npm-production group across 1 directory with 8 updates ([#31](https://github.com/gruch4/zebra-web/issues/31)) ([9980135](https://github.com/gruch4/zebra-web/commit/99801356b6e59299d1eabf616ad4f980c6727bd4))
+* **deps:** bump the python-minor-patch group across 1 directory with 6 updates ([#33](https://github.com/gruch4/zebra-web/issues/33)) ([c6c1f51](https://github.com/gruch4/zebra-web/commit/c6c1f51eee54aec0b6747ce57d958d68d1a482b7))
+
 ## [1.1.2](https://github.com/gruch4/zebra-web/compare/v1.1.1...v1.1.2) (2026-10-31)
 
 
